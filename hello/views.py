@@ -1,23 +1,27 @@
 import requests
+import os
 
 from django.shortcuts import render
+from django.shortcuts import redirect
 from django.http import HttpResponse
 
-from .models import Greeting
+import threading
 
-# Create your views here.
+from .forms import PushMessage
+
+from sendserver import schedulerDATA
+
 def index(request):
-    r = requests.get('http://httpbin.org/status/418')
-    print r.text
-    return HttpResponse('<pre>' + r.text + '</pre>')
+	if request.method == 'POST':
+		form = PushMessage(request.POST)
+		# push data on senddata method
+		body = form.data['body']
+		title = form.data['title']
+		time = form.data['time']
+		t1 = threading.Thread(target=schedulerDATA,args=(body,title,time))
+		t1.start()
+		return render(request,'index2.html',{'form':form})
+	else:
+		form = PushMessage()
 
-
-def db(request):
-
-    greeting = Greeting()
-    greeting.save()
-
-    greetings = Greeting.objects.all()
-
-    return render(request, 'db.html', {'greetings': greetings})
-
+	return render(request,'index.html',{'form':form})
