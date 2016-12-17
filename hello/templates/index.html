@@ -1,11 +1,22 @@
 <html>
     <div>
-	<form role="form" action="" method="post">
+    시간 설정 없이 메세지 보내기
+	<form role="form" action="" name="withtime"method="post">
+	    {% csrf_token %}
+		<p><label for="id_title">title(length:30):</label> <input id="id_title" type="text" name="title" maxlength="30" size="40" required /></p>
+		<p><label for="id_body">body(length:50):</label> <input type="text" name="body" id="id_body" maxlength="50" size="60" required /></p>
+	    <button type="submit" name="withouttime">Submit</button>
+	</form>
+   </div>
+
+    <div>
+    시간을 설정하고 메세지 보내기(현재보다 과거로 설정할 경우 바로 메세지가 보내짐)
+	<form role="form" action="" name="withtime"method="post">
 	    {% csrf_token %}
 		<p><label for="id_title">title(length:30):</label> <input id="id_title" type="text" name="title" maxlength="30" size="40" required /></p>
 		<p><label for="id_body">body(length:50):</label> <input type="text" name="body" id="id_body" maxlength="50" size="60" required /></p>
 		<p><label for="id_time">time:</label> <input type="datetime-local" name="time" id="id_time" required /></p>
-	    <button type="submit">Submit</button>
+	    <button type="submit" name="withtime">Submit</button>
 	</form>
    </div>
 </html>

@@ -9,10 +9,6 @@ from datetime import datetime
 gevent.monkey.patch_socket()
 gevent.monkey.patch_ssl()
 
-# def fetch(request):
-#     urlopen(request)
-
-
 def senddata(body,title):
 # def senddata(body,title,registrationids):
     MY_API_KEY="AIzaSyBnItRBbhgV46AJMX2vT7QvnFst97H1R-Q"
@@ -35,6 +31,8 @@ def senddata(body,title):
         }
     )
     urlopen(request)
+
+    # 레지스트레이션 아이디가 복수일 경우 아래와 같이 보냄
     # print urlopen(request).read()
 
 
@@ -64,22 +62,25 @@ def schedulerDATA(body,title,time):
     # for j in registrationGroups:
     #     registration1000 = []
     #     for i in xrange(0,1000):
-    #         registration1000.append(j)
+    #         registration1000.append(i)
     #     registrationGroup.append(registration1000)
     # # registrationGroup에는 1000개단위의 레지스트레이션 아이디의 묶음이 존재
 
     # 예약전송을 위한 시간 계산
-    year = time[0:4]
-    month = time[5:7]
-    day = time[8:10]
-    hour = time[11:13]
-    minute = time[14:16]
-    PushTime = datetime(int(year),int(month),int(day),int(hour),int(minute))
-    NowTime = datetime.now()
-    SleepTime = PushTime-NowTime
-    SleepSeconds = SleepTime.days*60*60*24 + SleepTime.seconds
-    if SleepSeconds < 0:
+    if time == 'without':
         SleepSeconds = 0
+    else:
+        year = time[0:4]
+        month = time[5:7]
+        day = time[8:10]
+        hour = time[11:13]
+        minute = time[14:16]
+        PushTime = datetime(int(year),int(month),int(day),int(hour),int(minute))
+        NowTime = datetime.now()
+        SleepTime = PushTime-NowTime
+        SleepSeconds = SleepTime.days*60*60*24 + SleepTime.seconds
+        if SleepSeconds < 0:
+            SleepSeconds = 0
 
     # gevent를 이용한 비동기 처리
     # senddata(body,title,registrationGroup)

@@ -1,8 +1,12 @@
 <html>
-pushed below data<br>
-title:{{form.data.title}}<br>
-body:{{form.data.body}}<br>
-time:{{form.data.time}}<br>
+아래의 내용을 전송했습니다.<br>
+제목:{{form.data.title}}<br>
+내용:{{form.data.body}}<br>
+{% if form.data.time == None %}
+현재 시각 발송
+{% else %}
+시간(과거일경우 즉시 발송됨):{{form.data.time}}<br>
+{% endif %}
 </html>
 <form action="" method="get">
     <input type="submit" value="Back"/>
