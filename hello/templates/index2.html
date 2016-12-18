@@ -5,7 +5,11 @@
 {% if form.data.time == None %}
 현재 시각 발송
 {% else %}
+{% if form.data.time == 'checktopic' %}
+{{form.data.checkdata}}의 토픽을 가진 사람들에게 전송
+{% else %}
 시간(과거일경우 즉시 발송됨):{{form.data.time}}<br>
+{% endif %}
 {% endif %}
 </html>
 <form action="" method="get">

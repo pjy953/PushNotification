@@ -9,12 +9,36 @@ from datetime import datetime
 gevent.monkey.patch_socket()
 gevent.monkey.patch_ssl()
 
-def senddata(body,title):
-# def senddata(body,title,registrationids):
+# topic 전송
+def senddatatopic(body,title,topic):
     MY_API_KEY="AIzaSyBnItRBbhgV46AJMX2vT7QvnFst97H1R-Q"
 
     data={
-        "registration_ids": ['fqbB0SFg2Pw:APA91bFHB1w3E108RCR1Nlw-64N4uUklbtVNE6-S9xJkXQ8JJygIql6zEkGKSdvBvNQ2v7UVOkGXGS7RaNi6iNkYCgYQFaoNnOQm8Asj_EQsNUzg291TtfLAI4xWwxdPfx_wTb9kHw0c'],
+        "to": "/topics/"+topic,
+        "notification" : {
+            "body" : body,
+            "title" : title,
+        }
+    }
+
+    dataAsJSON = json.dumps(data)
+
+    request = Request(
+        "https://gcm-http.googleapis.com/gcm/send",
+        dataAsJSON,
+        { "Authorization" : "key="+MY_API_KEY,
+          "Content-type" : "application/json"
+        }
+    )
+    urlopen(request)   
+
+def senddata(token,body,title): 
+# 데이터베이스가 완성되면 아래와 같은 인수를 받음
+# def senddata(body,title,registrationids): 
+    MY_API_KEY="AIzaSyBnItRBbhgV46AJMX2vT7QvnFst97H1R-Q"
+
+    data={
+        "registration_ids": [token],
         "notification" : {
             "body" : body,
             "title" : title,
@@ -33,9 +57,6 @@ def senddata(body,title):
     urlopen(request)
 
     # 레지스트레이션 아이디가 복수일 경우 아래와 같이 보냄
-    # print urlopen(request).read()
-
-
     # data={
     #     "registration_ids": registrationids,
     #     "notification" : {
@@ -43,9 +64,7 @@ def senddata(body,title):
     #         "title" : title,
     #     }
     # }
-
     # dataAsJSON = json.dumps(data)
-
     # request = Request(
     #     "https://gcm-http.googleapis.com/gcm/send",
     #     dataAsJSON,
@@ -85,7 +104,7 @@ def schedulerDATA(body,title,time):
     # gevent를 이용한 비동기 처리
     # senddata(body,title,registrationGroup)
     # LENGTH = len(registrationGroup)
-    LENGTH = 2
+    LENGTH = 1
     threads = []
     for i in range(0,LENGTH):
         threads.append(gevent.spawn_later(SleepSeconds,senddata,body,title))
