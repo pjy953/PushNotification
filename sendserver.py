@@ -74,7 +74,7 @@ def senddata(token,body,title):
     # )
     # urlopen(request)
 
-def schedulerDATA(body,title,time):
+def schedulerDATA(token,body,title,time):
     # # 데이터베이스에서 레지스트레이션 아이디를 가지고옴
     # # registrationGroups에 보관
     # registrationGroup = []
@@ -107,6 +107,6 @@ def schedulerDATA(body,title,time):
     LENGTH = 1
     threads = []
     for i in range(0,LENGTH):
-        threads.append(gevent.spawn_later(SleepSeconds,senddata,body,title))
+        threads.append(gevent.spawn_later(SleepSeconds,senddata,token,body,title))
         # threads.append(gevent.spawn(senddata,body,title,registrationGroup[i]))
     gevent.joinall(threads)
