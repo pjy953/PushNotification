@@ -5,12 +5,8 @@ admin.autodiscover()
 
 import hello.views
 
-# Examples:
-# url(r'^$', 'gettingstarted.views.home', name='home'),
-# url(r'^blog/', include('blog.urls')),
-
 urlpatterns = [
     url(r'^$', hello.views.index, name='index'),
- #    url(r'^admin/', include(admin.site.urls)),
-	# url(r'^posted/',hello.views.posted, name='posted')
+    url(r'^message/$', hello.views.message, name='message'),
+    url(r'^regist/$', hello.views.index, name='index')
 ]

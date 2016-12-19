@@ -1,0 +1,15 @@
+<html>
+    <div>
+    토큰 아이디 등록
+	<form role="form" action="" name="withtime"method="post">
+	    {% csrf_token %}
+	    {{form.as_p}}
+	    <button type="submit" name="saveregid">제출</button>
+	</form>
+   </div>
+   <br>
+   	<form action="" method="post">
+      {% csrf_token %}
+   		<button type="submit" name="directmessage">메시지 전송하러가기</button>
+   	</form>
+</html>

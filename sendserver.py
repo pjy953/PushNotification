@@ -32,13 +32,11 @@ def senddatatopic(body,title,topic):
     )
     urlopen(request)   
 
-def senddata(token,body,title): 
-# 데이터베이스가 완성되면 아래와 같은 인수를 받음
-# def senddata(body,title,registrationids): 
+def senddata(tokens,body,title): 
     MY_API_KEY="AIzaSyBnItRBbhgV46AJMX2vT7QvnFst97H1R-Q"
 
     data={
-        "registration_ids": [token],
+        "registration_ids": tokens,
         "notification" : {
             "body" : body,
             "title" : title,
@@ -56,34 +54,19 @@ def senddata(token,body,title):
     )
     urlopen(request)
 
-    # 레지스트레이션 아이디가 복수일 경우 아래와 같이 보냄
-    # data={
-    #     "registration_ids": registrationids,
-    #     "notification" : {
-    #         "body" : body,
-    #         "title" : title,
-    #     }
-    # }
-    # dataAsJSON = json.dumps(data)
-    # request = Request(
-    #     "https://gcm-http.googleapis.com/gcm/send",
-    #     dataAsJSON,
-    #     { "Authorization" : "key="+ MY_API_KEY,
-    #       "Content-type" : "application/json"
-    #     }
-    # )
-    # urlopen(request)
+def schedulerDATA(tokens,body,title,time):
+    registrationGroup = []
 
-def schedulerDATA(token,body,title,time):
-    # # 데이터베이스에서 레지스트레이션 아이디를 가지고옴
-    # # registrationGroups에 보관
-    # registrationGroup = []
-    # for j in registrationGroups:
-    #     registration1000 = []
-    #     for i in xrange(0,1000):
-    #         registration1000.append(i)
-    #     registrationGroup.append(registration1000)
-    # # registrationGroup에는 1000개단위의 레지스트레이션 아이디의 묶음이 존재
+    i = 1
+    registration1000 = []
+    for j in tokens:
+        registration1000.append(j['regid'])
+        i += 1
+        if i == 1000:
+            i = 0
+            registrationGroup.append(registration1000)
+            registration1000 = []
+    registrationGroup.append(registration1000)
 
     # 예약전송을 위한 시간 계산
     if time == 'without':
@@ -102,11 +85,8 @@ def schedulerDATA(token,body,title,time):
             SleepSeconds = 0
 
     # gevent를 이용한 비동기 처리
-    # senddata(body,title,registrationGroup)
-    # LENGTH = len(registrationGroup)
-    LENGTH = 1
+    LENGTH = len(registrationGroup)
     threads = []
     for i in range(0,LENGTH):
-        threads.append(gevent.spawn_later(SleepSeconds,senddata,token,body,title))
-        # threads.append(gevent.spawn(senddata,body,title,registrationGroup[i]))
+        threads.append(gevent.spawn_later(SleepSeconds,senddata,registrationGroup[i],body,title))
     gevent.joinall(threads)

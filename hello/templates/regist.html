@@ -1,0 +1,16 @@
+<html>
+	{{form.data.regid}}와 같은 토큰을 등록했습니다.
+	<div>
+	<form action="" method="POST"> 
+		{% csrf_token %}
+		<button type="submit" name="directmessage">메시지 전송하러 가기</button>
+	</form>
+	</div>
+	<div>
+	<form action="" method="POST">
+		{% csrf_token %}
+		<button type="submit" name="back">다른 토큰 등록하기</button>
+	</form>
+</div>
+
+</html>
